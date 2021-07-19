@@ -69,3 +69,11 @@ def test_max_points_available(client):
 
     response = client.get('/book/Fall%20Classic/Iron%20Temple')
     assert b'<input type="number" name="places" id="" min="0" max=4 />' in response.data
+    
+def test_booking_deduces_points(client):
+
+    response = client.post('/purchasePlaces', 
+        data={'club': "Simply Lift", 'competition': "Spring Festival", 'places': 5}, 
+        follow_redirects=True)
+    assert b'Great-booking complete!' in response.data
+    assert b'Points available: 8' in response.data
