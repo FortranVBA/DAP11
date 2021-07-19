@@ -26,9 +26,13 @@ def create_app():
 
     @app.route('/showSummary',methods=['POST'])
     def showSummary():
-        club = [club for club in clubs if club['email'] == request.form['email']][0]
-        return render_template('welcome.html',current_club=club,competitions=competitions, clubs=clubs)
-
+        list_clubs = [club for club in clubs if club['email'] == request.form['email']]
+        if list_clubs:
+            club = [club for club in clubs if club['email'] == request.form['email']][0]
+            return render_template('welcome.html',current_club=club,competitions=competitions, clubs=clubs)
+        else:
+            error = 'Email adress does not match any registered club.'
+            return render_template('index.html', error=error)
 
     @app.route('/book/<competition>/<club>')
     def book(competition,club):

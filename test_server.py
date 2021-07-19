@@ -77,3 +77,13 @@ def test_booking_deduces_points(client):
         follow_redirects=True)
     assert b'Great-booking complete!' in response.data
     assert b'Points available: 8' in response.data
+def test_correct_email_log(client):
+
+    response = client.post('/showSummary', data={'email': 'john@simplylift.co'})
+    assert b"Welcome, john@simplylift.co" in response.data
+
+def test_incorrect_email_log(client):
+
+    response = client.post('/showSummary', data={'email': 'fake@mail.com'})
+    assert b"Email adress does not match any registered club." in response.data
+    
