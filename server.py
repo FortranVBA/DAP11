@@ -38,11 +38,11 @@ def create_app():
             competition_date = datetime.strptime(foundCompetition["date"], "%Y-%m-%d %H:%M:%S")
             if competition_date < datetime.now():
                 flash("Error: Past competitions cannot be booked")
-                return render_template('welcome.html', club=foundClub, competitions=competitions, clubs=clubs)        
+                return render_template('welcome.html', current_club=foundClub, competitions=competitions, clubs=clubs)        
             return render_template('booking.html',club=foundClub,competition=foundCompetition)
         else:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions, clubs=clubs)
+            return render_template('welcome.html', current_club=club, competitions=competitions, clubs=clubs)
 
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():
