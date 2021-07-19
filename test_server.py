@@ -54,3 +54,9 @@ def test_good_booking_competition(client):
     response = client.get('/book/Fall%20Classic/Simply%20Lift')
 
     assert b"How many places?" in response.data
+
+def test_max_purchase(client):
+
+    response = client.get('/book/Fall%20Classic/Simply%20Lift')
+    assert b'<input type="number" name="places" id="" min="0" max=12 />' in response.data
+    
