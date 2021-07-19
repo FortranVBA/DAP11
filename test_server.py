@@ -11,6 +11,11 @@ def client(monkeypatch):
                 "name":"Simply Lift",
                 "email":"john@simplylift.co",
                 "points":"13"
+            },
+            {
+                "name":"Iron Temple",
+                "email": "admin@irontemple.com",
+                "points":"4"
             },            
         ]
     monkeypatch.setattr("server.loadClubs", mock_loadClubs, raising=True)
@@ -60,3 +65,7 @@ def test_max_purchase(client):
     response = client.get('/book/Fall%20Classic/Simply%20Lift')
     assert b'<input type="number" name="places" id="" min="0" max=12 />' in response.data
     
+def test_max_points_available(client):
+
+    response = client.get('/book/Fall%20Classic/Iron%20Temple')
+    assert b'<input type="number" name="places" id="" min="0" max=4 />' in response.data
