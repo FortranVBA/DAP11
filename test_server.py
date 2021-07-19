@@ -31,7 +31,7 @@ def client(monkeypatch):
     with app.test_client() as client:
         yield client
 
-def test_display_point_balance(client):
+def test_max_purchase(client):
 
     response = client.get('/book/Spring%20Festival/Simply%20Lift')
     assert b'<input type="number" name="places" id="" min="0" max=12 />' in response.data
