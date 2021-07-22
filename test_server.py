@@ -10,7 +10,7 @@ def client(monkeypatch):
             {
                 "name":"Simply Lift",
                 "email":"john@simplylift.co",
-                "points":"13"
+                "points":"80"
             },
             {
                 "name":"Iron Temple",
@@ -46,8 +46,8 @@ def test_display_point_balance(client):
     response = client.post('/showSummary', data={'email': 'john@simplylift.co'})
 
     assert b"Club balances:" in response.data
-    assert b"Simply Lift" in response.data
-    assert b"Points available: 13" in response.data
+    assert b"Iron Temple" in response.data
+    assert b"Points available: 4" in response.data
 
 def test_booking_past_competition(client):
 
@@ -68,7 +68,7 @@ def test_max_purchase(client):
 def test_max_points_available(client):
 
     response = client.get('/book/Fall%20Classic/Iron%20Temple')
-    assert b'<input type="number" name="places" id="" min="0" max=4 />' in response.data
+    assert b'<input type="number" name="places" id="" min="0" max=1 />' in response.data
     
 def test_booking_deduces_points(client):
 
@@ -76,7 +76,8 @@ def test_booking_deduces_points(client):
         data={'club': "Simply Lift", 'competition': "Spring Festival", 'places': 5}, 
         follow_redirects=True)
     assert b'Great-booking complete!' in response.data
-    assert b'Points available: 8' in response.data
+    assert b'Points available: 65' in response.data
+    
 def test_correct_email_log(client):
 
     response = client.post('/showSummary', data={'email': 'john@simplylift.co'})

@@ -43,10 +43,10 @@ def create_app():
             if competition_date < datetime.now():
                 flash("Error: Past competitions cannot be booked")
                 return render_template('welcome.html', current_club=foundClub, competitions=competitions, clubs=clubs)        
-            maxPoint = min(int(foundClub["points"]), 12)
+            maxSeat = min(int(foundClub["points"])//3, 12)
             return render_template('booking.html',
                 club=foundClub,competition=foundCompetition, 
-                maxPoint=maxPoint)
+                maxSeat=maxSeat)
         else:
             flash("Something went wrong-please try again")
             return render_template('welcome.html', current_club=club, competitions=competitions, clubs=clubs)
@@ -58,11 +58,11 @@ def create_app():
         placesRequired = int(request.form['places'])
         club["points"] = int(club["points"])
 
-        if club["points"] < placesRequired:
+        if club["points"] * 3 < placesRequired:
             flash('The club does not have enough points !')
         else:
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-            club["points"] -= placesRequired
+            club["points"] -= placesRequired * 3
             flash('Great-booking complete!')
         return render_template('welcome.html', current_club=club, competitions=competitions, clubs=clubs)
 
