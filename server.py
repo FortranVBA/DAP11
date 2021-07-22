@@ -55,6 +55,12 @@ def create_app():
     def purchasePlaces():
         competition = [c for c in competitions if c['name'] == request.form['competition']][0]
         club = [c for c in clubs if c['name'] == request.form['club']][0]
+
+        competition_date = datetime.strptime(competition["date"], "%Y-%m-%d %H:%M:%S")
+        if competition_date < datetime.now():
+            flash("Error: Past competitions cannot be booked")
+            return render_template('welcome.html', current_club=club, competitions=competitions, clubs=clubs)        
+
         placesRequired = int(request.form['places'])
         club["points"] = int(club["points"])
 

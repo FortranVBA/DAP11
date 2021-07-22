@@ -73,10 +73,11 @@ def test_max_points_available(client):
 def test_booking_deduces_points(client):
 
     response = client.post('/purchasePlaces', 
-        data={'club': "Simply Lift", 'competition': "Spring Festival", 'places': 5}, 
+        data={'club': "Simply Lift", 'competition': "Fall Classic", 'places': 5}, 
         follow_redirects=True)
     assert b'Great-booking complete!' in response.data
     assert b'Points available: 8' in response.data
+
 def test_correct_email_log(client):
 
     response = client.post('/showSummary', data={'email': 'john@simplylift.co'})
@@ -87,3 +88,16 @@ def test_incorrect_email_log(client):
     response = client.post('/showSummary', data={'email': 'fake@mail.com'})
     assert b"Email adress does not match any registered club." in response.data
     
+def test_post_booking_past_competition(client):
+    response = client.post('/purchasePlaces', 
+        data={'club': "Simply Lift", 'competition': "Spring Festival", 'places': 2}, 
+        follow_redirects=True)
+
+    assert b"Error: Past competitions cannot be booked" in response.data
+
+def test_post_booking_competition(client):
+    response = client.post('/purchasePlaces', 
+        data={'club': "Simply Lift", 'competition': "Fall Classic", 'places': 2}, 
+        follow_redirects=True)
+
+    assert b"Great-booking complete!" in response.data
