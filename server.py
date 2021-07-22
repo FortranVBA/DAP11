@@ -36,20 +36,26 @@ def create_app():
 
     @app.route('/book/<competition>/<club>')
     def book(competition,club):
-        foundClub = [c for c in clubs if c['name'] == club][0]
-        foundCompetition = [c for c in competitions if c['name'] == competition][0]
-        if foundClub and foundCompetition:
-            competition_date = datetime.strptime(foundCompetition["date"], "%Y-%m-%d %H:%M:%S")
-            if competition_date < datetime.now():
-                flash("Error: Past competitions cannot be booked")
-                return render_template('welcome.html', current_club=foundClub, competitions=competitions, clubs=clubs)        
-            maxSeat = min(int(foundClub["points"])//3, 12)
-            return render_template('booking.html',
-                club=foundClub,competition=foundCompetition, 
-                maxSeat=maxSeat)
-        else:
-            flash("Something went wrong-please try again")
+        matching_clubs = [c for c in clubs if c['name'] == club]
+        if not matching_clubs:
+            flash("Something went wrong with your club. Please log out and try again")
             return render_template('welcome.html', current_club=club, competitions=competitions, clubs=clubs)
+        foundClub = matching_clubs[0]
+
+        matching_competitions = [c for c in competitions if c['name'] == competition]
+        if not matching_competitions:
+            flash("Something went wrong with the competition. Please try again")
+            return render_template('welcome.html', current_club=foundClub, competitions=competitions, clubs=clubs)
+        foundCompetition = matching_competitions[0]
+
+        competition_date = datetime.strptime(foundCompetition["date"], "%Y-%m-%d %H:%M:%S")
+        if competition_date < datetime.now():
+            flash("Error: Past competitions cannot be booked")
+            return render_template('welcome.html', current_club=foundClub, competitions=competitions, clubs=clubs)        
+        maxSeat = min(int(foundClub["points"])//3, 12)
+        return render_template('booking.html',
+            club=foundClub,competition=foundCompetition, 
+            maxSeat=maxSeat)
 
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():

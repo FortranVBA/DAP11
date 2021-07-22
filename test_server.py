@@ -122,3 +122,14 @@ def test_post_booking_competition(client):
         follow_redirects=True)
 
     assert b"Great-booking complete!" in response.data
+
+def test_book_with_unknown_club(client):
+
+    response = client.get('/book/Fall%20Classic/Unknown')
+    assert b'Something went wrong with your club.' in response.data
+
+def test_book_with_unknown_competition(client):
+
+    response = client.get('/book/Unknown/Iron%20Temple')
+    assert b'Something went wrong with the competition.' in response.data
+    
