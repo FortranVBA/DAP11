@@ -46,3 +46,17 @@ def test_good_booking_competition(client):
     response = client.get('/book/Fall%20Classic/Simply%20Lift')
 
     assert b"How many places?" in response.data
+
+def test_post_booking_past_competition(client):
+    response = client.post('/purchasePlaces', 
+        data={'club': "Simply Lift", 'competition': "Spring Festival", 'places': 2}, 
+        follow_redirects=True)
+
+    assert b"Error: Past competitions cannot be booked" in response.data
+
+def test_post_booking_competition(client):
+    response = client.post('/purchasePlaces', 
+        data={'club': "Simply Lift", 'competition': "Fall Classic", 'places': 2}, 
+        follow_redirects=True)
+
+    assert b"Great-booking complete!" in response.data
