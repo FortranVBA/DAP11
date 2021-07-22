@@ -53,7 +53,7 @@ def create_app():
         competition_date = datetime.strptime(competition["date"], "%Y-%m-%d %H:%M:%S")
         if competition_date < datetime.now():
             flash("Error: Past competitions cannot be booked")
-            return render_template('welcome.html', club=competition, competitions=competitions)        
+            return render_template('welcome.html', club=club, competitions=competitions)        
 
         placesRequired = int(request.form['places'])
         competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
