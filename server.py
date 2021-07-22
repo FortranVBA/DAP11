@@ -58,7 +58,7 @@ def create_app():
         placesRequired = int(request.form['places'])
         club["points"] = int(club["points"])
 
-        if club["points"] * 3 < placesRequired:
+        if club["points"] < 3 * placesRequired:
             flash('The club does not have enough points !')
         else:
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired

@@ -73,7 +73,7 @@ def test_max_points_available(client):
 def test_booking_deduces_points(client):
 
     response = client.post('/purchasePlaces', 
-        data={'club': "Simply Lift", 'competition': "Spring Festival", 'places': 5}, 
+        data={'club': "Simply Lift", 'competition': "Fall Classic", 'places': 5}, 
         follow_redirects=True)
     assert b'Great-booking complete!' in response.data
     assert b'Points available: 65' in response.data
@@ -87,4 +87,25 @@ def test_incorrect_email_log(client):
 
     response = client.post('/showSummary', data={'email': 'fake@mail.com'})
     assert b"Email adress does not match any registered club." in response.data
+    
+def test_index(client):
+
+    response = client.get('/')
+    assert b"Welcome to the GUDLFT Registration Portal!" in response.data
+    
+
+def test_logout(client):
+
+    response = client.post('/showSummary', data={'email': 'john@simplylift.co'}, 
+        follow_redirects=True)
+
+    response = client.get('/logout', follow_redirects=True)
+    assert b"Welcome to the GUDLFT Registration Portal!" in response.data
+
+def test_post_not_enough_points(client):
+
+    response = client.post('/purchasePlaces', 
+        data={'club': "Iron Temple", 'competition': "Fall Classic", 'places': 5}, 
+        follow_redirects=True)
+    assert b'The club does not have enough points !' in response.data
     
