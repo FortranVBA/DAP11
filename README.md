@@ -7,6 +7,9 @@ flask run
 
 pytest --cov=server --cov-report html test_functional/test_*.py test_unit/test_*.py
 
+http://localhost:8089
+
+
 1. Why
 
 
