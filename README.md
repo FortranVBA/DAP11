@@ -1,5 +1,12 @@
 # gudlift-registration
 
+python -m pytest
+
+export FLASK_APP=server.py
+flask run
+
+pytest --cov=server --cov-report html test_functional/test_*.py test_unit/test_*.py
+
 1. Why
 
 

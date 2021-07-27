@@ -71,6 +71,8 @@ def create_app():
 
         if club["points"] < 3 * placesRequired:
             flash('The club does not have enough points !')
+        elif placesRequired > 12:
+            flash('Cannot book more than 12 places !')
         else:
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             club["points"] -= placesRequired * 3

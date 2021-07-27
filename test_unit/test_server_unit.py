@@ -87,6 +87,8 @@ def test_display_competitions(client):
     assert b"Number of Places: 25" in response.data
     assert b"Fall Classic" in response.data
     assert b"Number of Places: 13" in response.data
+    assert b"New Year" in response.data
+    assert b"Number of Places: 8" in response.data
 
 def test_booking_past_competition(client):
 
@@ -119,13 +121,27 @@ def test_max_purchase(client):
     response = client.get('/book/Fall%20Classic/Simply%20Lift')
     assert response.status_code == 200
     assert b'<input type="number" name="places" id="" min="0" max=12 />' in response.data
-    
+
+def test_post_above_max_limit(client):
+
+    response = client.post('/purchasePlaces', 
+        data={'club': "Simply Lift", 'competition': "Fall Classic", 'places': 13}, 
+        follow_redirects=True)
+    assert b'Cannot book more than 12 places !' in response.data
+
 def test_max_points_available(client):
 
     response = client.get('/book/Fall%20Classic/Iron%20Temple')
     assert response.status_code == 200
     assert b'<input type="number" name="places" id="" min="0" max=1 />' in response.data
-    
+
+def test_post_not_enough_points(client):
+
+    response = client.post('/purchasePlaces', 
+        data={'club': "Iron Temple", 'competition': "Fall Classic", 'places': 5}, 
+        follow_redirects=True)
+    assert b'The club does not have enough points !' in response.data
+
 def test_booking_deduces_points(client):
 
     response = client.post('/purchasePlaces', 
@@ -134,13 +150,6 @@ def test_booking_deduces_points(client):
     assert response.status_code == 200
     assert b'Great-booking complete!' in response.data
     assert b'Points available: 65' in response.data    
-
-def test_post_not_enough_points(client):
-
-    response = client.post('/purchasePlaces', 
-        data={'club': "Iron Temple", 'competition': "Fall Classic", 'places': 5}, 
-        follow_redirects=True)
-    assert b'The club does not have enough points !' in response.data
     
 def test_book_with_unknown_club(client):
 
