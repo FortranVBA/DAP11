@@ -69,7 +69,7 @@ def test_booking_process(client):
     assert b'Points available: 65' in response.data
     assert b'Number of Places: 8' in response.data
     
-def test_access_multiple_comptetitions(client):
+def test_access_multiple_competitions(client):
 
     response = client.post('/showSummary', data={'email': 'john@simplylift.co'})
     response = client.get('/book/Spring%20Festival/Simply%20Lift')
@@ -86,7 +86,7 @@ def test_access_multiple_comptetitions(client):
     assert b'Number of Places: 13' in response.data
     assert b'Number of Places: 8' in response.data
 
-def test_book_multiple_comptetitions(client):
+def test_book_multiple_competitions(client):
 
     response = client.post('/showSummary', data={'email': 'john@simplylift.co'})
     response = client.get('/book/Fall%20Classic/Simply%20Lift')
